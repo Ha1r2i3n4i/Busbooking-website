@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BUS BOOKING WEBSITE</title>
+    <link rel="stylesheet" href="stle.css">
+    <link rel="stylesheet" href="demo.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<script>
+  const daysContainer = document.getElementById("daysContainer");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const monthYear = document.getElementById("monthYear");
+const dateInput = document.getElementById("dateInput");
+const calendar = document.getElementById("calendar");
+
+let currentDate = new Date();
+let selectedDate = null;
+
+function handleDayClick(day) {
+  selectedDate = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    day
+  );
+  dateInput.value = selectedDate.toLocaleDateString("en-US");
+  calendar.style.display = "none";
+  renderCalendar();
+}
+
+function createDayElement(day) {
+  const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+  const dayElement = document.createElement("div");
+  dayElement.classList.add("day");
+
+  if (date.toDateString() === new Date().toDateString()) {
+    dayElement.classList.add("current");
+  }
+  if (selectedDate && date.toDateString() === selectedDate.toDateString()) {
+    dayElement.classList.add("selected");
+  }
+
+  dayElement.textContent = day;
+  dayElement.addEventListener("click", () => {
+    handleDayClick(day);
+  });
+  daysContainer.appendChild(dayElement);
+}
+
+function renderCalendar() {
+  daysContainer.innerHTML = "";
+  const firstDay = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  );
+  const lastDay = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+    0
+  );
+
+  monthYear.textContent = `${currentDate.toLocaleString("default", {
+    month: "long"
+  })} ${currentDate.getFullYear()}`;
+
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    createDayElement(day);
+  }
+}
+
+prevBtn.addEventListener("click", () => {
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  renderCalendar();
+});
+
+nextBtn.addEventListener("click", () => {
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  renderCalendar();
+});
+
+dateInput.addEventListener("click", () => {
+  calendar.style.display = "block";
+  positionCalendar();
+});
+
+document.addEventListener("click", (event) => {
+  if (!dateInput.contains(event.target) && !calendar.contains(event.target)) {
+    calendar.style.display = "none";
+  }
+});
+
+function positionCalendar() {
+  const inputRect = dateInput.getBoundingClientRect();
+  calendar.style.top = inputRect.bottom + "px";
+  calendar.style.left = inputRect.left + "px";
+}
+
+window.addEventListener("resize", positionCalendar);
+
+renderCalendar();
+</script>
+<body>
+<div class="main">
+    <main class="app1">
+        <div class="screen-wrap">
+            <section class="screen-home">
+                <div class="screen-home__form-wrap">
+                    <div class="screen-home__form">
+                        <form>
+                            <div id="formdetail">
+                                <div class="screen-home__location">
+                                    <div class="lable">
+                                        <figure class="icon"><img src="https://i.ibb.co/KwnYdXN/location.png"></figure>
+                                        <span class="text">Location Details</span>
+                                    </div>
+                                    <div class="input-wrap">
+                                        <div class="inside-wrap">
+                                            <div class="rotate-btn">
+                                                <figure>
+                                                    <img src="https://i.ibb.co/HPBrQkn/rotate-btn.png">
+                                                </figure>
+                                            </div>
+                                            <div class="from">
+                                                <span class="inside-lable">From</span>
+                                                <select class="input" name="source">
+                                                    <option value="Chennai">Chennai</option>
+                                                    <option value="Bangalore">Bangalore</option>
+                                                    <option value="Coimbatore">Coimbatore</option>
+                                                    <option value="Kerala">Kerala</option>
+                                                </select>
+                                            </div>
+                                            <div class="to">
+                                                <span class="inside-lable">To</span>
+                                                <select class="input" name="destination">
+                                                    <option value="Chennai">Chennai</option>
+                                                    <option value="Bangalore">Bangalore</option>
+                                                    <option value="Coimbatore">Coimbatore</option>
+                                                    <option value="Kerala">Kerala</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="screen-home__date">
+                                    <div class="lable">
+                                        <figure class="icon"><img src="https://i.ibb.co/7N5zdnc/calendar.png"></figure>
+                                        <span class="text">Date Details</span>
+                                    </div>
+                                    <div class="input-wrap">
+                                        <div class="calendar-box">
+                      <h2 class="calendar-title">Select a Date</h2>
+                      <input type="text" id="dateInput" placeholder="Select a date">
+                      <div class="calendar" id="calendar">
+                        <div class="header">
+                        <button id="prevBtn">&lt;</button>
+                        <h2 id="monthYear">Month Year</h2>
+                        <button id="nextBtn">&gt;</button>
+                        </div>
+                        <div class="days" id="daysContainer"></div>
+                      </div>
+                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="screen-home__submit-wrap">
+                                <div class="screen-home__bus-page" id="buspage">
+                                    <div class="screen-home__inside-wave"></div>
+                                    <a href="index2.html">
+                                        <figure class="screen-home__bus-arrow-wrap">
+                                            <img src="https://i.ibb.co/nQ4khG8/arrow.png">
+                                        </figure>
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="screen-home__recent-search">
+                        <div class="lable">
+                            <figure class="icon"><img src="https://i.ibb.co/dM8cwj6/recent-search.png"></figure>
+                            <span class="text">Recent search</span>
+                        </div>
+                        <div class="screen-home__rs-wrap">
+                            <ul class="screen-home__rs-row">
+                                <li class="screen-home__rs-col">
+                                    <div class="screen-homers-from-to">
+                                        <span>Chennai</span>
+                                        <span class="screen-home__rs-arrow"></span>
+                                        <span>Bangalore</span>
+                                    </div>
+                                    <div class="screen-home__rs-date">05 / 12 / 2019</div>
+                                </li>
+                                <li class="screen-home__rs-col">
+                                    <div class="screen-homers-from-to">
+                                        <span>Chennai</span>
+                                        <span class="screen-home__rs-arrow"></span>
+                                        <span>Bangalore</span>
+                                    </div>
+                                    <div class="screen-home__rs-date">05 / 12 / 2019</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+<script src="script.js"></script>
+</body>
+</html>
